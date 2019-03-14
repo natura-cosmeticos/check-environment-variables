@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-const checkVariables = require('./bin/checkVariables')
+const checkVariablesCommander = require('./bin/checkVariablesCommander')
 
-const { executionSuccessfully } = checkVariables({
+const { executionSuccessfully } = checkVariablesCommander({
   argv: process.argv,
   environmentVariables: process.env,
   logger: console.log,

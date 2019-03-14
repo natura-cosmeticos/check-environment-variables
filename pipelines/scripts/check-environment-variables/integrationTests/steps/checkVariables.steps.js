@@ -4,7 +4,7 @@ const path = require('path')
 
 const SPEC_FILES_FOLDER = 'specFiles'
 
-const checkVariables = require('../../bin/checkVariables')
+const checkVariablesCommander = require('../../bin/checkVariablesCommander')
 
 Given('an environment', function () {
   this.environmentVariables = {
@@ -17,7 +17,7 @@ When('I check the variables', function () {
   const { environmentVariables } = this
   const currentDirectory = path.join(__dirname, SPEC_FILES_FOLDER)
 
-  this.result = checkVariables({
+  this.result = checkVariablesCommander({
     argv: ['node', 'check-variables'],
     environmentVariables,
     logger () {},
@@ -63,7 +63,7 @@ When('I check those variables', function () {
   const { environmentVariables, specYamlFile } = this
   const currentDirectory = __dirname
 
-  this.result = checkVariables({
+  this.result = checkVariablesCommander({
     argv: includeBail(['node', 'check-variables', specYamlFile], Boolean(this.formatter)),
     environmentVariables,
     logger () {},
