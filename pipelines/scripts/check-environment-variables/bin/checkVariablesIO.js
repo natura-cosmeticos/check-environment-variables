@@ -5,10 +5,10 @@ const YAML = require('yaml')
 const checkVariables = require('../src/checkVariables')
 
 module.exports = function checkVariablesIO ({ yamlFile, environmentVariables, logger, bail, formatterName }) {
-	const specYamlFile = fs.readFileSync(yamlFile, 'utf8')
-	const checkVariablesSpec = YAML.parse(specYamlFile).checkVariables
+  const checkVariablesSpecYamlFile = fs.readFileSync(yamlFile, 'utf8')
+  const checkVariablesSpec = YAML.parse(checkVariablesSpecYamlFile).checkVariables
 
-	const checkResult = checkVariables(environmentVariables, checkVariablesSpec)
+  const checkResult = checkVariables(environmentVariables, checkVariablesSpec)
 
   if (!checkResult.success) {
     logger(`❌ Some errors has happened: \n${chalk.red(checkResult.messages.map(printError))}`)

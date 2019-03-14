@@ -50,7 +50,7 @@ Given('a environment with required variables and a missing variable', function (
 })
 
 Given('a spec saying that I need the variable', function () {
-  this.specYamlFile = path.join(__dirname, SPEC_FILES_FOLDER, 'requiredVariables.spec.yaml')
+  this.checkVariablesSpecFile = path.join(__dirname, SPEC_FILES_FOLDER, 'requiredVariables.spec.yaml')
 })
 
 function includeBail (argv, bail) {
@@ -60,11 +60,11 @@ function includeBail (argv, bail) {
 }
 
 When('I check those variables', function () {
-  const { environmentVariables, specYamlFile } = this
+  const { environmentVariables, checkVariablesSpecFile } = this
   const currentDirectory = __dirname
 
   this.result = checkVariablesCommander({
-    argv: includeBail(['node', 'check-variables', specYamlFile], Boolean(this.formatter)),
+    argv: includeBail(['node', 'check-variables', checkVariablesSpecFile], Boolean(this.formatter)),
     environmentVariables,
     logger () {},
     currentDirectory
@@ -90,7 +90,7 @@ Then('It says that the environment miss the variable necessary', function () {
 
 Given('a spec file with invalid checkers', function () {
   this.environmentVariables = {}
-  this.specYamlFile = path.join(__dirname, SPEC_FILES_FOLDER, 'invalidCheckers.spec.yaml')
+  this.checkVariablesSpecFile = path.join(__dirname, SPEC_FILES_FOLDER, 'invalidCheckers.spec.yaml')
 })
 
 Then('It refuses to check and return invalid checkers', function () {
@@ -103,7 +103,7 @@ Then('It refuses to check and return invalid checkers', function () {
 })
 
 Given('a spec using a formatter {string}', function (formatter) {
-  this.specYamlFile = path.join(__dirname, SPEC_FILES_FOLDER, `${formatter}FormatterSpec.spec.yaml`)
+  this.checkVariablesSpecFile = path.join(__dirname, SPEC_FILES_FOLDER, `${formatter}FormatterSpec.spec.yaml`)
   this.formatter = formatter
 })
 
@@ -111,11 +111,18 @@ Given('environment with VARIABLE with the value {string}', function (value) {
   this.environmentVariables = { VARIABLE: value }
 })
 
-When('It says that the value {string} is invalid {string}', function (value, formatterLabel) {
-  expect(this.result.executionSuccessfully).to.equal(false)
-  expect(this.result.success).to.equal(true)
-  expect(this.result.hasErrors).to.equal(true)
+When('It says that the value {string} is invalid {string}, or return with error {string}',
+  function (value, formatterLabel, errorMessage) {
+    expect(this.result.executionSuccessfully).to.equal(false)
+    expect(this.result.success).to.equal(true)
+    expect(this.result.hasErrors).to.equal(true)
 
-  const [check] = this.result.variables
-  expect(check.error).to.equal(`The value: "${value}" is not a valid ${formatterLabel}.`)
-})
+    const [check] = this.result.variables
+    if (errorMessage) {
+      expect(check.error).to.equal(errorMessage)
+      return
+    }
+
+    expect(check.error).to.equal(`The value: "${value}" is not a valid ${formatterLabel}.`)
+  }
+)

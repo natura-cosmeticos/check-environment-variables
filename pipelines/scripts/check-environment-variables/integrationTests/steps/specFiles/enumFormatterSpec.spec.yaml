@@ -1,0 +1,6 @@
+checkVariables:
+  VARIABLE:
+    type: enum
+    possibleValues:
+      - value1
+      - value2

@@ -2,7 +2,7 @@
   "name": "check-environment-variables",
   "version": "0.0.1",
   "description": "Check needed environment variables",
-  "main": "./src/checkVariables.js",
+  "main": "./index.js",
   "bin": {
     "check-variables": "./checkVariables.js"
   },

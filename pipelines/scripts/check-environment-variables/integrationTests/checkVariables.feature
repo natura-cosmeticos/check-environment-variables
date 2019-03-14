@@ -22,11 +22,12 @@ Feature: Check Variables
     Given a spec using a formatter '<formatter>'
       And environment with VARIABLE with the value '<value>'
     When I check those variables
-    Then It says that the value '<value>' is invalid '<formatterLabel>'
+    Then It says that the value '<value>' is invalid '<formatterLabel>', or return with error '<errorMessage>'
     
     Examples:
-    | formatter | formatterLabel | value |
-    | url       | URL            | not a valid url |
-    | email     | e-mail         | not a valid email |
-    | boolean   | boolean        | not boolean |
-    | number    | number         | not a number |
+    | formatter | formatterLabel | value             | errorMessage |
+    | url       | URL            | not a valid url   | |
+    | email     | e-mail         | not a valid email | |
+    | boolean   | boolean        | not boolean       | |
+    | number    | number         | not a number      | |
+    | enum      | enum           | wrong value       | The value: "wrong value" does not match possible values (value1,value2). |

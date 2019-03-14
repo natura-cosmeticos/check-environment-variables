@@ -1,9 +1,13 @@
 const RequiredVariableChecker = require('./RequiredVariableChecker')
 
 module.exports = function StringVariableChecker (variableValue, { variableName, minLength = 1, maxLength = 65536, regex = null, required }) {
-  if (typeof minLength !== 'number') { return { invalid: true, error: `The specification minLength of ${variableName} is not a number.` } }
+  if (typeof minLength !== 'number') {
+    return { invalid: true, error: `The specification minLength of ${variableName} is not a number.` }
+  }
 
-  if (typeof maxLength !== 'number') { return { invalid: true, error: `The specification maxLength of ${variableName} is not a number.` } }
+  if (typeof maxLength !== 'number') {
+    return { invalid: true, error: `The specification maxLength of ${variableName} is not a number.` }
+  }
 
   const { error } = RequiredVariableChecker(variableValue, { required })
   if (error) return { error }

@@ -1,10 +1,11 @@
 const VARIABLE_CHECKER_BUILDERS = {
-  string: require('./variableCheckers/StringVariableChecker'),
-  email: require('./variableCheckers/EmailVariableChecker'),
   boolean: require('./variableCheckers/BooleanVariableChecker'),
+  email: require('./variableCheckers/EmailVariableChecker'),
+  enum: require('./variableCheckers/EnumVariableChecker'),
   number: require('./variableCheckers/NumberVariableChecker'),
-  url: require('./variableCheckers/UrlVariableChecker'),
-  required: require('./variableCheckers/RequiredVariableChecker')
+  required: require('./variableCheckers/RequiredVariableChecker'),
+  string: require('./variableCheckers/StringVariableChecker'),
+  url: require('./variableCheckers/UrlVariableChecker')
 }
 
 const TYPES_OF_SPECIFICATION = ['boolean', 'object', 'string']
