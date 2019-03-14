@@ -1,0 +1,7 @@
+checkVariables:
+  SHELL:
+    type: string
+    minLength: 2
+  SHELL2:
+    type: string
+    minLength: 2

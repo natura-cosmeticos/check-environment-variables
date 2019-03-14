@@ -1,0 +1,4 @@
+checkVariables:
+  NOT_RECOGNIZED_SPECIFICATION: 1
+  NOT_RECOGNIZED_TYPE:
+    type: wrongType

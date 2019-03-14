@@ -1,0 +1,8 @@
+checkVariables:
+  SHELL: true
+  A_MISSING_REQUIRED_URL:
+    required: true
+    type: string
+  OTHER_REQUIRED_STRING:
+    required: true
+    type: string
