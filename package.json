@@ -4,7 +4,8 @@
   "description": "Check needed environment variables",
   "main": "./index.js",
   "bin": {
-    "check-variables": "./checkVariables.js"
+    "check-variables": "./checkVariables.js",
+    "validate-spec": "./validateSpecYaml.js"
   },
   "scripts": {
     "lint": "eslint src/ integrationTests/ *.js",

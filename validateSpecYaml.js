@@ -1,10 +1,13 @@
+#!/usr/bin/env node
+
 const fs = require('fs');
 const path = require('path');
 const YAML = require('yaml');
 
 const { checkVariablesIO } = require('./index');
 
-const specYamlFile = fs.readFileSync(path.join(__dirname, 'examples', 'spec-full.yaml'), 'utf8');
+const specToLoad = process.argv[2];
+const specYamlFile = fs.readFileSync(path.join(__dirname, specToLoad), 'utf8');
 const spec = YAML.parse(specYamlFile);
 
 function hasAWellKnowDatabaseEngine(database) {
@@ -25,7 +28,7 @@ const { hasErrors } = checkVariablesIO({
   formatterName: 'pretty',
   // eslint-disable-next-line no-console
   logger: console.log,
-  yamlFile: path.join(__dirname, 'examples', discoverSpecFileBySpec(spec)),
+  yamlFile: path.join(__dirname, 'templates', discoverSpecFileBySpec(spec)),
 });
 
 process.exit(1 - (+!hasErrors));

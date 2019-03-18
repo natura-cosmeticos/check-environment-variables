@@ -1,7 +1,6 @@
 checkVariables:
   START_EXPRESS: boolean
   REQUEST_TIMEOUT: number
-  API_HOST: url
   LOG_NAMESPACES: true
   DATABASE_NAME: true
   DATABASE_USER: true
