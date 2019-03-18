@@ -7,7 +7,7 @@ const YAML = require('yaml');
 const { checkVariablesIO } = require('./index');
 
 const specToLoad = process.argv[2];
-const specYamlFile = fs.readFileSync(path.join(__dirname, specToLoad), 'utf8');
+const specYamlFile = fs.readFileSync(path.join(process.cwd(), specToLoad), 'utf8');
 const spec = YAML.parse(specYamlFile);
 
 function hasAWellKnowDatabaseEngine(database) {
