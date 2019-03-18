@@ -1,0 +1,36 @@
+
+{
+  "env": {
+    "es6": true,
+    "mocha": true,
+    "node": true
+  },
+  "extends": ["@naturacosmeticos/eslint-config-natura"],
+  "parserOptions": {
+    "ecmaVersion": 2018
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src", "integrationTests"]
+      }
+    },
+    "import/core-modules": [ "chai", "cucumber" ]
+  },
+  "rules": {
+    "global-require": "off"
+  },
+  "overrides": [
+    {
+      "files": ["integrationTests/**/*.js", "**/__tests__/**/*.js"],
+      "rules": {
+        "func-names": "off",
+        "max-lines": "off",
+        "max-lines-per-function": "off",
+        "max-statements": ["error", 15],
+        "sort-keys": "off"
+      }
+    }
+  ]
+
+}

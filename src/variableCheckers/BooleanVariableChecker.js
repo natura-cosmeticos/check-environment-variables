@@ -1,12 +1,13 @@
-const RequiredVariableChecker = require('./RequiredVariableChecker')
+const RequiredVariableChecker = require('./RequiredVariableChecker');
 
-module.exports = function BooleanVariableChecker (variableValue, { required }) {
-  const { error } = RequiredVariableChecker(variableValue, { required })
-  if (error) return { error }
+module.exports = function BooleanVariableChecker(variableValue, { required }) {
+  const { error } = RequiredVariableChecker(variableValue, { required });
 
-  if (variableValue === null) return { error: null }
+  if (error) return { error };
 
-  if (/^true|false$/.test(variableValue)) return { error: null }
+  if (variableValue === null) return { error: null };
 
-  return { error: `The value: "${variableValue}" is not a valid boolean.` }
-}
+  if (/^true|false$/.test(variableValue)) return { error: null };
+
+  return { error: `The value: "${variableValue}" is not a valid boolean.` };
+};

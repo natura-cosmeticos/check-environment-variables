@@ -5,62 +5,66 @@ const VARIABLE_CHECKER_BUILDERS = {
   number: require('./variableCheckers/NumberVariableChecker'),
   required: require('./variableCheckers/RequiredVariableChecker'),
   string: require('./variableCheckers/StringVariableChecker'),
-  url: require('./variableCheckers/UrlVariableChecker')
+  url: require('./variableCheckers/UrlVariableChecker'),
+};
+
+const TYPES_OF_SPECIFICATION = ['boolean', 'object', 'string'];
+
+function invalidVariableChecker({ invalid }) {
+  return Boolean(invalid);
 }
 
-const TYPES_OF_SPECIFICATION = ['boolean', 'object', 'string']
-
-module.exports = function checkVariables (environmentVariables, checkVariablesSpec) {
-  const variablesCheckers = Object.entries(checkVariablesSpec)
-    .map(transformKeyValueInVariableChecker, { environmentVariables })
-
-  const invalidCheckers = variablesCheckers.filter(invalidVariableChecker)
-  if (invalidCheckers.length) {
-    return {
-      success: false,
-      messages: invalidCheckers.map(getError)
-    }
-  }
-
-  const hasErrors = variablesCheckers.some(getError)
-
-  return { success: true, hasErrors, variables: variablesCheckers }
+function getError({ error }) {
+  return error;
 }
 
-function transformKeyValueInVariableChecker ([variableName, specification]) {
-  const typeOfSpecification = typeof specification
+function invalidType(variableName, specification) {
+  return { error: `Unrecognized type for variable ${variableName}: ${specification}`, invalid: true };
+}
 
-  if (!TYPES_OF_SPECIFICATION.includes(typeOfSpecification)) return invalidType(variableName, specification)
+// eslint-disable-next-line complexity, max-lines-per-function
+function transformKeyValueInVariableChecker([variableName, specification]) {
+  const typeOfSpecification = typeof specification;
 
-  const variableValue = this.environmentVariables[variableName] === undefined ? null : this.environmentVariables[variableName]
+  // eslint-disable-next-line max-len
+  if (!TYPES_OF_SPECIFICATION.includes(typeOfSpecification)) return invalidType(variableName, specification);
+
+  // eslint-disable-next-line max-len
+  const variableValue = this.environmentVariables[variableName] === undefined ? null : this.environmentVariables[variableName];
 
   if (typeOfSpecification === 'boolean') {
     return {
       variable: variableName,
       value: variableValue,
-      ...VARIABLE_CHECKER_BUILDERS.required(variableValue, { required: specification })
-    }
+      ...VARIABLE_CHECKER_BUILDERS.required(variableValue, { required: specification }),
+    };
   }
 
-  const VariableCheckerBuilder = VARIABLE_CHECKER_BUILDERS[specification.type || specification]
+  const VariableCheckerBuilder = VARIABLE_CHECKER_BUILDERS[specification.type || specification];
 
-  if (!VariableCheckerBuilder) return invalidType(variableName, specification.type)
+  if (!VariableCheckerBuilder) return invalidType(variableName, specification.type);
 
   return {
     variable: variableName,
     value: variableValue,
-    ...VariableCheckerBuilder(variableValue, { ...specification, variableName })
+    ...VariableCheckerBuilder(variableValue, { ...specification, variableName }),
+  };
+}
+
+module.exports = function checkVariables(environmentVariables, checkVariablesSpec) {
+  const variablesCheckers = Object.entries(checkVariablesSpec)
+    .map(transformKeyValueInVariableChecker, { environmentVariables });
+
+  const invalidCheckers = variablesCheckers.filter(invalidVariableChecker);
+
+  if (invalidCheckers.length) {
+    return {
+      messages: invalidCheckers.map(getError),
+      success: false,
+    };
   }
-}
 
-function invalidVariableChecker ({ invalid }) {
-  return Boolean(invalid)
-}
+  const hasErrors = variablesCheckers.some(getError);
 
-function getError ({ error }) {
-  return error
-}
-
-function invalidType (variableName, specification) {
-  return { invalid: true, error: `Unrecognized type for variable ${variableName}: ${specification}` }
-}
+  return { hasErrors, success: true, variables: variablesCheckers };
+};

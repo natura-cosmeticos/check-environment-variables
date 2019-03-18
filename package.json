@@ -1,5 +1,5 @@
 {
-  "name": "check-environment-variables",
+  "name": "@naturacosmeticos/check-environment-variables",
   "version": "0.0.1",
   "description": "Check needed environment variables",
   "main": "./index.js",
@@ -7,7 +7,8 @@
     "check-variables": "./checkVariables.js"
   },
   "scripts": {
-    "lint": "standard -v",
+    "lint": "eslint src/ integrationTests/ *.js",
+    "lint:fix": "eslint --fix src/ integrationTests/ *.js",
     "test": "npm run test:unit && npm run test:integration",
     "test:unit": "mocha --recursive --exit --colors --exclude \"./test/**/*.steps.js\" \"./bin/**/*.test.js\"  \"./src/**/*.test.js\"",
     "test:integration": "cucumber-js --exit -f progress-bar integrationTests",
@@ -23,9 +24,13 @@
       "it"
     ]
   },
-  "author": "Natura GSP",
-  "license": "UNLICENSED",
+  "author": "Natura Cosméticos <TDDAArquitetura@natura.net>",
+  "contributors": [
+    "Alberto Silva <alberto@vizir.com.br>",
+    "Fabrício Campos <fabricio@vizir.com.br>"
+  ],
   "devDependencies": {
+    "@naturacosmeticos/eslint-config-natura": "^1.0.0",
     "chai": "^4.2.0",
     "cross-env": "^5.2.0",
     "cucumber": "^5.1.0",
@@ -40,5 +45,8 @@
     "chalk": "^2.4.2",
     "commander": "^2.19.0",
     "yaml": "^1.3.2"
-  }
+  },
+  "homepage": "https://github.com/natura-cosmeticos/check-environment-variables#readme",
+  "bugs": "https://github.com/natura-cosmeticos/check-environment-variables/issues",
+  "license": "MIT"
 }
