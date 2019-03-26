@@ -9,11 +9,75 @@ Check environment variables helps verify variables set by setup files (ex: spec.
 
 ### How to use
 
-If you want to check your environment variables you can run: `check-variables`
+If you want to check your environment variables you can run: `check-variables`, when you execute this binary file it will
+look for a file, on the same level with the name `checkVariablesSpec.yaml`, and it is going to compare the variables on
+the **process.env** and compare against the specification on the file.
 
-Now to check variables in a spec file, you need to run: `validate-spec-yaml [MY_SPEC_FILE_PATH]`
+See this example file:
+```yaml
+checkVariables:
+  START_SERVER: # required boolean variable (true or false)
+    type: boolean
+    required: true
+  REQUEST_TIMEOUT: number # not require number
+  API_HOST: url # not required url
+  FROM_EMAIL: email # not required url
+  NAMESPACE: string # not required string
+  ENDPOINT: true # required variable to have on process.env
+  AWS_REGION: # the variable value should be one of the possibleValues
+    type: enum
+    possibleValues:
+      - us-east-2
+      - us-east-1
+      - us-west-1
+      - us-west-2
+  MY_OTHER_VARIABLE: # an string, starting with maria, with length from 7 to 20
+    type: string
+    required: true
+    minLength: 7
+    maxLength: 20
+    regex: ^maria
+```
+
+If you run `check-variables` against this file it is going to check the varaibles `START_SERVER, REQUEST_TIMEOUT, API_HOST, FROM_EMAIL, NAMESPACE, ENDPOINT, AWS_REGION, MY_OTHER_VARIABLE` on your **process.env**
+
+Options of `check-variables`:
+```bash
+# default value for yamlFile is "checkVariablesSpec.yaml"
+Usage: checkVariables [options] [yamlFile]
+
+Options:
+  -V, --version                output the version number
+  -b, --bail                   Indicates whether or not the proccess exits with status non ok when oneor more variables are wrong
+  -f, --formatter [formatter]  The formatter of output: json, inline, pretty (default: "pretty")
+  -h, --help                   output usage information
+```
+
+In order to check variables in a spec file, you need to run: `validate-spec-yaml [MY_SPEC_FILE_PATH]`
 
 The comparison will occur according to the templates files in `/templates`.
+
+#### Using programatically
+```javascript
+const checkVariables = require('check-variables');
+
+const myVariables = {
+  myServerShouldStart: process.env.START_SERVER,
+  region: process.env.REGION
+}
+
+// follow the same specification of "checkVariablesSpec.yaml" file
+const mySpecification = {
+  myServerShouldStart: 'boolean',
+  region: {
+    type: 'enum',
+    possibleValues: ['north', 'south']
+  }
+}
+const result = checkVariables(myVariables, mySpecification) // as the first parameter you can also use process.env
+result.success // true when all variables respects the rules in specification
+result.messages  // and array of messages about each varaible validation
+```
 
 ### Supported setup files
 
