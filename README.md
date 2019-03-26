@@ -11,7 +11,7 @@ Check environment variables helps verify variables set by setup files (ex: spec.
 
 If you want to check your environment variables you can run: `check-variables`
 
-Now to check if the variables in a spec file, you need to run: `validate-spec-yaml [MY_SPEC_FILE_PATH]`
+Now to check variables in a spec file, you need to run: `validate-spec-yaml [MY_SPEC_FILE_PATH]`
 
 The comparison will occur according to the templates files in `/templates`.
 
