@@ -75,8 +75,10 @@ const mySpecification = {
   }
 }
 const result = checkVariables(myVariables, mySpecification) // as the first parameter you can also use process.env
-result.success // true when all variables respects the rules in specification
-result.messages  // and array of messages about each varaible validation
+result.success // false when the specification is not valid, true when validation happened
+result.messages // when at least one of the specification are invalid you can see what is invalid
+result.hasErrors  // false when all variables respects the rules in specification
+result.variables // an array, items has the fields: 'variable' -> name of the variable, 'value' -> the value of variable, 'error' -> null if the value of the variable is ok against the rule, string containing the error if not ok
 ```
 
 ### Supported setup files
