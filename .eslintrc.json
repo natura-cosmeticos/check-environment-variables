@@ -18,17 +18,18 @@
     "import/core-modules": [ "chai", "cucumber" ]
   },
   "rules": {
-    "global-require": "off"
+    "global-require": "off",
+    "max-len": ["error", 120]
   },
   "overrides": [
     {
-      "files": ["integrationTests/**/*.js", "**/__tests__/**/*.js"],
+      "files": ["integrationTests/**/*.js", "**/*.test.js"],
       "rules": {
         "func-names": "off",
         "max-lines": "off",
         "max-lines-per-function": "off",
         "max-statements": ["error", 15],
-        "sort-keys": "off"
+        "prefer-arrow-callback": "off"
       }
     }
   ]
