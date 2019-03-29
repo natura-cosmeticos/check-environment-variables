@@ -26,7 +26,7 @@ When('I check the variables', function () {
 });
 
 Then('It validates the environment variables', function () {
-  expect(this.result).to.deep.equal({
+  expect(this.result).to.deep.include({
     executionSuccessfully: true,
     hasErrors: false,
     success: true,
