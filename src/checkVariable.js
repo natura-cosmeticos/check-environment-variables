@@ -20,8 +20,8 @@ function nullWhenUndefined(variableValue) {
 
 function createVariableCheck(variable, value, variableCheckResult) {
   return {
-    variable,
     value,
+    variable,
     ...variableCheckResult,
   };
 }

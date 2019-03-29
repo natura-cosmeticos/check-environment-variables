@@ -27,7 +27,7 @@ describe('variableCheckers:BooleanVariableChecker', () => {
   });
 
   it('returns an error when variableValue is required, but it is not sent', () => {
-    const { error } = BooleanVariableChecker(null, { variableName: 'A_VARIABLE', required: true });
+    const { error } = BooleanVariableChecker(null, { required: true, variableName: 'A_VARIABLE' });
 
     expect(error).to.equal('The variable is not defined on the environment.');
   });
