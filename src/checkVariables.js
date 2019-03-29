@@ -1,14 +1,5 @@
-const VARIABLE_CHECKER_BUILDERS = {
-  boolean: require('./variableCheckers/BooleanVariableChecker'),
-  email: require('./variableCheckers/EmailVariableChecker'),
-  enum: require('./variableCheckers/EnumVariableChecker'),
-  number: require('./variableCheckers/NumberVariableChecker'),
-  required: require('./variableCheckers/RequiredVariableChecker'),
-  string: require('./variableCheckers/StringVariableChecker'),
-  url: require('./variableCheckers/UrlVariableChecker'),
-};
-
-const TYPES_OF_SPECIFICATION = ['boolean', 'object', 'string'];
+const assert = require('assert');
+const checkVariable = require('./checkVariable');
 
 function invalidVariableChecker({ invalid }) {
   return Boolean(invalid);
@@ -18,53 +9,42 @@ function getError({ error }) {
   return error;
 }
 
-function invalidType(variableName, specification) {
-  return { error: `Unrecognized type for variable ${variableName}: ${specification}`, invalid: true };
-}
-
-// eslint-disable-next-line complexity, max-lines-per-function
-function transformKeyValueInVariableChecker([variableName, specification]) {
-  const typeOfSpecification = typeof specification;
-
-  // eslint-disable-next-line max-len
-  if (!TYPES_OF_SPECIFICATION.includes(typeOfSpecification)) return invalidType(variableName, specification);
-
-  // eslint-disable-next-line max-len
-  const variableValue = this.environmentVariables[variableName] === undefined ? null : this.environmentVariables[variableName];
-
-  if (typeOfSpecification === 'boolean') {
-    return {
-      variable: variableName,
-      value: variableValue,
-      ...VARIABLE_CHECKER_BUILDERS.required(variableValue, { required: specification }),
-    };
-  }
-
-  const VariableCheckerBuilder = VARIABLE_CHECKER_BUILDERS[specification.type || specification];
-
-  if (!VariableCheckerBuilder) return invalidType(variableName, specification.type);
+function createVariableCheckReturnForInvalidSpecification(invalidCheckers) {
+  const messages = invalidCheckers.map(getError);
 
   return {
-    variable: variableName,
-    value: variableValue,
-    ...VariableCheckerBuilder(variableValue, { ...specification, variableName }),
+    assertVariablesAreOk: assert.fail.bind(assert, messages.join(', ')),
+    messages,
+    success: false,
   };
 }
 
-module.exports = function checkVariables(environmentVariables, checkVariablesSpec) {
-  const variablesCheckers = Object.entries(checkVariablesSpec)
-    .map(transformKeyValueInVariableChecker, { environmentVariables });
+function getErrorForVariableCheck(variableCheck) {
+  return `- ${variableCheck.variable}: ${getError(variableCheck)};`;
+}
+
+function createVariableCheckReturnWhenSpecificationIsValid(variablesCheckers) {
+  const variablesCheckersWithError = variablesCheckers.filter(getError);
+  const hasErrors = variablesCheckersWithError.length > 0;
+
+  return {
+    assertVariablesAreOk: assert.ok.bind(
+      assert,
+      !hasErrors,
+      `Some variables doesn't follow the specification:\n${variablesCheckers.map(getErrorForVariableCheck).join('\n')}`,
+    ),
+    hasErrors,
+    success: true,
+    variables: variablesCheckers,
+  };
+}
+
+module.exports = function checkVariables(environmentVariables, checkVariablesSpecification) {
+  const variablesCheckers = Object.entries(checkVariablesSpecification).map(checkVariable, { environmentVariables });
 
   const invalidCheckers = variablesCheckers.filter(invalidVariableChecker);
 
-  if (invalidCheckers.length) {
-    return {
-      messages: invalidCheckers.map(getError),
-      success: false,
-    };
-  }
+  if (invalidCheckers.length) return createVariableCheckReturnForInvalidSpecification(invalidCheckers);
 
-  const hasErrors = variablesCheckers.some(getError);
-
-  return { hasErrors, success: true, variables: variablesCheckers };
+  return createVariableCheckReturnWhenSpecificationIsValid(variablesCheckers);
 };

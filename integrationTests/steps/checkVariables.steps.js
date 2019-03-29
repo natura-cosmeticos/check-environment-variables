@@ -8,8 +8,8 @@ const checkVariablesCommander = require('../../bin/checkVariablesCommander');
 
 Given('an environment', function () {
   this.environmentVariables = {
-    SHELL: '/bin/zsh',
     OTHER_REQUIRED_STRING: 'an value',
+    SHELL: '/bin/zsh',
   };
 });
 
@@ -19,14 +19,14 @@ When('I check the variables', function () {
 
   this.result = checkVariablesCommander({
     argv: ['node', 'check-variables'],
+    currentDirectory,
     environmentVariables,
     logger() {},
-    currentDirectory,
   });
 });
 
 Then('It validates the environment variables', function () {
-  expect(this.result).to.deep.equal({
+  expect(this.result).to.deep.include({
     executionSuccessfully: true,
     hasErrors: false,
     success: true,
@@ -44,8 +44,8 @@ Then('It validates the environment variables', function () {
 
 Given('a environment with required variables and a missing variable', function () {
   this.environmentVariables = {
-    SHELL: '/bin/zsh',
     OTHER_REQUIRED_STRING: 'an value',
+    SHELL: '/bin/zsh',
   };
 });
 
@@ -65,9 +65,9 @@ When('I check those variables', function () {
 
   this.result = checkVariablesCommander({
     argv: includeBail(['node', 'check-variables', checkVariablesSpecFile], Boolean(this.formatter)),
+    currentDirectory,
     environmentVariables,
     logger() {},
-    currentDirectory,
   });
 });
 
