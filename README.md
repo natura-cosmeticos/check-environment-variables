@@ -44,7 +44,7 @@ If you run `check-variables` against this file it is going to check the varaible
 Options of `check-variables`:
 ```bash
 # default value for yamlFile is "checkVariablesSpec.yaml"
-Usage: checkVariables [options] [yamlFile]
+Usage: check-variables [options] [yamlFile]
 
 Options:
   -V, --version                output the version number
@@ -75,6 +75,7 @@ const mySpecification = {
   }
 }
 const result = checkVariables(myVariables, mySpecification) // as the first parameter you can also use process.env
+result.assertVariablesAreOK() // throws an AssertionError if something is not right
 result.success // false when the specification is not valid, true when validation happened
 result.messages // when at least one of the specification are invalid you can see what is invalid
 result.hasErrors  // false when all variables respects the rules in specification
