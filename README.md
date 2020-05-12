@@ -94,7 +94,6 @@ Run `npm i`.
 
 Just run `npm test`.
 
-
 ### Lint
 
 To verify if any lint rule was broken run: `npm run lint`.
