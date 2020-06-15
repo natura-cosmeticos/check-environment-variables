@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "chalk": "^2.4.2",
-    "commander": "^2.19.0",
+    "commander": "^5.0.0",
     "yaml": "^1.4.0"
   },
   "homepage": "https://github.com/natura-cosmeticos/check-environment-variables#readme",
